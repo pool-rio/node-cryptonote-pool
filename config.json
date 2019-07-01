@@ -116,10 +116,10 @@
   },
   "daemon": {
     "host": "127.0.0.1",
-    "port": 19002
+    "port": 19001
   },
   "wallet": {
-    "host": " 167.99.99.85",
+    "host": "127.0.0.1",
     "port": 8070,
     "password": "<replace with rpc password>"
   },
