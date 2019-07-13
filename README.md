@@ -1,14 +1,19 @@
-## This repo is looking for maintainers! Please reach out if interested.
---------
+![image](https://user-images.githubusercontent.com/34389545/35821974-62e0e25c-0a70-11e8-87dd-2cfffeb6ed47.png)
+
+#### Master Build Status
+[![Build Status](https://travis-ci.org/turtlecoin/node-turtle-pool.svg?branch=master)](https://travis-ci.org/turtlecoin/node-turtle-pool)
+
+#### Development Build Status
+[![Build Status](https://travis-ci.org/turtlecoin/node-turtle-pool.svg?branch=development)](https://travis-ci.org/turtlecoin/node-turtle-pool)
 
 
-node-cryptonote-pool
+turtle-pool (for NodeJS LTS)
 ====================
+Formerly known as cryptonote-forknote-pool, forked from Forknote Project.
 
-High performance Node.js (with native C addons) mining pool for CryptoNote based coins such as Bytecoin, Monero, QuazarCoin, HoneyPenny, etc..
+High performance Node.js (with native C addons) mining pool for Cryptonote based coins, created with the Forknote software such as Bytecoin, Dashcoin, etc..
+
 Comes with lightweight example front-end script which uses the pool's AJAX API.
-
-
 
 #### Table of Contents
 * [Features](#features)
@@ -26,12 +31,12 @@ Comes with lightweight example front-end script which uses the pool's AJAX API.
 * [Setting up Testnet](#setting-up-testnet)
 * [JSON-RPC Commands from CLI](#json-rpc-commands-from-cli)
 * [Monitoring Your Pool](#monitoring-your-pool)
-* [Donations](#donations)
+* [Configuring Blockchain Explorer](#configuring-blockchain-explorer)
 * [Credits](#credits)
 * [License](#license)
 
 
-#### Features
+#### Basic features
 
 * TCP (stratum-like) protocol for server-push based jobs
   * Compared to old HTTP protocol, this has a higher hash rate, lower network/CPU server load, lower orphan
@@ -56,89 +61,120 @@ Comes with lightweight example front-end script which uses the pool's AJAX API.
   * Each miners' individual stats (hashrate, shares submitted, pending balance, total paid, etc)
   * Blocks found (pending, confirmed, and orphaned)
 * An easily extendable, responsive, light-weight front-end using API to display data
-* Worker login validation (make sure miners are using proper wallet addresses for mining)
+
+#### Extra features
+
+* Admin panel
+  * Aggregated pool statistics
+  * Coin daemon & wallet RPC services stability monitoring
+  * Log files data access
+  * Users list with detailed statistics
+* Historic charts of pool's hashrate and miners count, coin difficulty, rates and coin profitability
+* Historic charts of users's hashrate and payments
+* Miner login(wallet address) validation
+* Five configurable CSS themes
+* Universal blocks and transactions explorer based on [chainradar.com](http://chainradar.com)
+* FantomCoin & MonetaVerde support
+* Set fixed difficulty on miner client by passing "address" param with ".[difficulty]" postfix
+* Prevent "transaction is too big" error with "payments.maxTransactionAmount" option
 
 
 ### Community / Support
 
+* [CryptoNote Technology](https://cryptonote.org)
 * [CryptoNote Forum](https://forum.cryptonote.org/)
-* [Bytecoin Github](https://github.com/amjuarez/bytecoin)
-* [Monero Github](https://github.com/monero-project/bitmonero)
-* [Monero Announcement Thread](https://bitcointalk.org/index.php?topic=583449.0)
-* IRC (freenode)
-  * Support / general discussion join #monero: https://webchat.freenode.net/?channels=#monero
-  * Development discussion join #monero-dev: https://webchat.freenode.net/?channels=#monero-dev
-
+* [CryptoNote Universal Pool Forum](https://bitcointalk.org/index.php?topic=705509)
+* [Forknote](https://forknote.net)
+* [TurtleCoin](http://chat.turtlecoin.lol)
 
 #### Pools Using This Software
 
-* http://xminingpool.com
-* http://xmr.poolto.be
-* https://moneropool.com
-* http://monero.crypto-pool.fr
-* https://minexmr.com
-
-A pool must be operational for 6 months or more before it can be added to this list.
-
+* http://democats.org
+* http://cryptonotepool.com/
 
 Usage
 ===
 
 #### Requirements
-* Coin daemon(s) (find the coin's repo and build latest version from source)
-* [Node.js](http://nodejs.org/) v0.10+ ([follow these installation instructions](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
+* Turtlecoind daemon
+* turtle-service
+* [Node.js](http://nodejs.org/) LTS (6,8,10) ([follow these installation instructions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions))
 * [Redis](http://redis.io/) key-value store v2.6+ ([follow these instructions](http://redis.io/topics/quickstart))
 * libssl required for the node-multi-hashing module
-  * For Ubuntu: `sudo apt-get install libssl-dev`
-* Boost is required for the cryptonote-util module
-  * For Ubuntu: `sudo apt-get install libboost-all-dev`
+  * For Ubuntu: `sudo apt-get install -y libssl-dev`
 
+##### Windows Support
+
+You will need the windows build tools to install this module (and many more) on windows. Run the following command to set up your environment.
+
+```bash
+npm install -g windows-build-tools --vs2015
+```
 
 ##### Seriously
 Those are legitimate requirements. If you use old versions of Node.js or Redis that may come with your system package manager then you will have problems. Follow the linked instructions to get the last stable versions.
-
 
 [**Redis security warning**](http://redis.io/topics/security): be sure firewall access to redis - an easy way is to
 include `bind 127.0.0.1` in your `redis.conf` file. Also it's a good idea to learn about and understand software that
 you are using - a good place to start with redis is [data persistence](http://redis.io/topics/persistence).
 
+##### Easy install on Ubuntu 14 LTS
+
+Installing pool on different Linux distributives is different because it depends on system default components and versions. For now the easiest way to install pool is to use Ubuntu 14 LTS. Thus, all you had to do in order to prepare Ubuntu 14 for pool installation is to run:
+
+```bash
+sudo apt-get install -y git build-essential redis-server libboost1.55-all-dev cmake libssl-dev node-gyp
+```
+
+##### Debian 9 installation
+These are the steps taken to install pool on Debian 9.  These steps will also work on Ubuntu 16 & 18:
+
+```bash
+sudo apt-get install -y git curl wget screen build-essential redis-server libboost-all-dev cmake libssl-dev node-gyp
+```
+I have currently tested this on Node 8.11.1 and 8.12.0.
+
+You can install node here: (https://nodejs.org/en/download/package-manager/)
+
+Or directly from a terminal:
+
+```bash
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+I have found using a screen session to keep everything running on the server works well.
+
+Grab your most recent TurtleCoin release (https://github.com/turtlecoin/turtlecoin/releases/) then launch your daemon and sync your chain.
+
+Once your daemon is synced with the network start your turtle-service and redis-server.
 
 #### 1) Downloading & Installing
 
-
-Clone the repository and run `npm update` for all the dependencies to be installed:
+Clone the repository and run `npm install` for all the dependencies to be installed:
 
 ```bash
-git clone https://github.com/zone117x/node-cryptonote-pool.git pool
-cd pool
-
-nvm install 0.10.48
-nvm use 0.10.48
-nvm alias default 0.10.48
-nvm use default
-
-npm update
+git clone https://github.com/turtlecoin/turtle-pool turtle-pool
+cd turtle-pool
+npm install && npm test
 ```
 
 #### 2) Configuration
 
 
-*Warning for Cyrptonote coins other than Monero:* this software may or may not work with any given cryptonote coin.
-Be wary of altcoins that change the number of minimum coin units because you will have to reconfigure several config
-values to account for those changes. Unless you're offering a bounty reward - do not open an issue asking for help
-getting a coin other than Monero working with this software.
-
-
-Copy the `config_example.json` file to `config.json` then overview each options and change any to match your preferred setup.
-
-
 Explanation for each field:
 ```javascript
 /* Used for storage in redis so multiple coins can share the same redis instance. */
-"coin": "monero",
+"coin": "dashcoin",
 
 /* Used for front-end display */
-"symbol": "MRO",
+"symbol": "DSH",
+
+/* Minimum units in a single coin, see COIN constant in DAEMON_CODE/src/cryptonote_config.h */
+"coinUnits": 1000000000000,
+
+/* Coin network time to mine one block, see DIFFICULTY_TARGET constant in DAEMON_CODE/src/cryptonote_config.h */
+"coinDifficultyTarget": 120,
 
 "logging": {
 
@@ -174,7 +210,7 @@ Explanation for each field:
     "clusterForks": "auto",
 
     /* Address where block rewards go, and miner payments come from. */
-    "poolAddress": "4AsBy39rpUMTmgTUARGq2bFQWhDhdQNekK5v4uaLU699NPAnx9CubEJ82AkvD5ScoAZNYRwBxybayainhyThHAZWCdKmPYn"
+    "poolAddress": "D6WLtrV1SBWV8HWQzQv8uuYuGy3uwZ8ah5iT5HovSqhTKMauquoTsKP8RBJzVqVesX87poYWQgkGWB4NWHJ6Ravv93v4BaE"
 
     /* Poll RPC daemons for new blocks every this many milliseconds. */
     "blockRefreshInterval": 1000,
@@ -208,18 +244,35 @@ Explanation for each field:
         "maxDiff": 100000,
         "targetTime": 100, //Try to get 1 share per this many seconds
         "retargetTime": 30, //Check to see if we should retarget every this many seconds
-        "variancePercent": 30, //Allow time to vary this % from target without retargeting
-        "maxJump": 100 //Limit diff percent increase/decrease in a single retargetting
+        "variancePercent": 30, //Allow time to very this % from target without retargeting
+        "maxJump": 100 //Limit diff percent increase/decrease in a single retargeting
+    },
+
+    /* Set difficulty on miner client side by passing <address> param with .<difficulty> postfix
+       minerd -u D3z2DDWygoZU4NniCNa4oMjjKi45dC2KHUWUyD1RZ1pfgnRgcHdfLVQgh5gmRv4jwEjCX5LoLERAf5PbjLS43Rkd8vFUM1m.5000 */
+    "fixedDiff": {
+        "enabled": true,
+        "separator": ".", // character separator between <address> and <difficulty>
     },
 
     /* Feature to trust share difficulties from miners which can
        significantly reduce CPU load. */
     "shareTrust": {
-        "enabled": true,
-        "min": 10, //Minimum percent probability for share hashing
-        "stepDown": 3, //Increase trust probability % this much with each valid share
-        "threshold": 10, //Amount of valid shares required before trusting begins
-        "penalty": 30 //Upon breaking trust require this many valid share before trusting
+      "enabled": false, //enable or disable the shareTrust system. shareTrust can offer significant CPU workload reduction, however does present a risk of being exploited by miners gaming the percentages of the system.
+      "maxTrustPercent": 50, //The maximum percent chance a share will be considered trusted (not fully validated) 50 means 1 of 2 shares are fully validated at random, 75 means 1 of 4 are fully validated (or 3 of 4 are trusted).
+      "probabilityStepPercent": 1, //The percent the probabality of a share is trusted increases from 0 to maxTrustPercent at a maximum rate of once per probabilityStepWindow seconds in steps of probabilityStepPercent and only on share submission.
+      "probabilityStepWindow": 30, //The probability (chance a share is considered trusted) will increase from 0 to maxTrustPercent by steps of probabilityStepPercent at a maximum rate of once every probabilityStepWindow seconds.
+      "minUntrustedShares": 50, //The minimum amount of shares that will be fully validated before shareTrust will begin.
+      "minUntrustedSeconds": 300, //The minimum amount of time in seconds shares will be fully validated before shareTrust will begin.
+      "maxTrustedDifficulty": 100000, //Shares above this difficulty will be fully validated (not trusted).
+      "maxPenaltyMultiplier": 100, //The maximum penalty multiplied against minUntrustedShares and minUntrustedSeconds.
+      "minPenaltyMultiplier": 2, //The minimum penalty multiplied against minUntrustedShares and minUntrustedSeconds.
+      "penaltyMultiplierStep": 1, //The penalty is multiplied against minUntrustedShares and minUntrustedSeconds. The penalty Steps up/down penaltyMultiplierStep a maximum of once per every penaltyStepUpWindow or penaltyStepDownWindow and only on share submission.
+      "penaltyStepUpWindow": 30, //The penalty steps up a maximum of penaltyMultiplierStep every penaltyStepUpWindow seconds and only on share submission.
+      "penaltyStepDownWindow": 120, //The penalty steps down a maximum of penaltyMultiplierStep every penaltyStepDownWindow seconds and only on share submission.
+      "maxShareWindow": 300, //Must Submit within this window or minUntrustedSeconds, minUntrustedShares and Probability are reset.
+      "maxIPCRate": 15, //The minimum amount of seconds between sharing a miners shareTrust data between pool threads.
+      "maxAge": 604800 //Maximum seconds to retain dissconnected miner shareTrust data in memory.
     },
 
     /* If under low-diff share attack we can ban their IP to reduce system/network load. */
@@ -229,14 +282,14 @@ Explanation for each field:
         "invalidPercent": 25, //What percent of invalid shares triggers ban
         "checkThreshold": 30 //Perform check when this many shares have been submitted
     },
-    /* [Warning: several reports of this feature being broken. Proposed fix needs to be tested.] 
-        Slush Mining is a reward calculation technique which disincentivizes pool hopping and rewards 
-        'loyal' miners by valuing younger shares higher than older shares. Remember adjusting the weight!
-        More about it here: https://mining.bitcoin.cz/help/#!/manual/rewards */
+    /* Slush Mining is a reward calculation technique which disincentivizes pool hopping and rewards users to mine with the pool steadily: Values of each share decrease in time – younger shares are valued higher than older shares.
+    More about it here: https://mining.bitcoin.cz/help/#!/manual/rewards */
+    /* There is some bugs with enabled slushMining. Use with '"enabled": false' only. */
+
     "slushMining": {
-        "enabled": false, //Enables slush mining. Recommended for pools catering to professional miners
-        "weight": 300, //Defines how fast the score assigned to a share declines in time. The value should roughly be equivalent to the average round duration in seconds divided by 8. When deviating by too much numbers may get too high for JS.
-        "lastBlockCheckRate": 1 //How often the pool checks the timestamp of the last block. Lower numbers increase load but raise precision of the share value
+        "enabled": false, // 'true' enables slush mining. Recommended for pools catering to professional miners
+        "weight": 120, //defines how fast value assigned to a share declines in time
+        "lastBlockCheckRate": 1 //How often the pool checks for the timestamp of the last block. Lower numbers increase load for the Redis db, but make the share value more precise.
     }
 },
 
@@ -245,9 +298,9 @@ Explanation for each field:
     "enabled": true,
     "interval": 600, //how often to run in seconds
     "maxAddresses": 50, //split up payments if sending to more than this many addresses
-    "mixin": 3, //number of transactions yours is indistinguishable from
     "transferFee": 5000000000, //fee to pay for each transaction
     "minPayment": 100000000000, //miner balance required before sending payment
+    "maxTransactionAmount": 0, //split transactions by this amount(to prevent "too big transaction" error)
     "denomination": 100000000000 //truncate to this precision and store remainder
 },
 
@@ -263,7 +316,7 @@ Explanation for each field:
     "depth": 60,
     "poolFee": 1.8, //1.8% pool fee (2% total fee total including donations)
     "devDonation": 0.1, //0.1% donation to send to pool dev - only works with Monero
-    "coreDevDonation": 0.1 //0.1% donation to send to core devs - only works with Monero
+    "coreDevDonation": 0.1 //0.1% donation to send to core devs - works with Bytecoin, Monero, Dashcoin, QuarazCoin, Fantoncoin, AEON and OneEvilCoin
 },
 
 /* AJAX API used for front-end website. */
@@ -271,6 +324,7 @@ Explanation for each field:
     "enabled": true,
     "hashrateWindow": 600, //how many second worth of shares used to estimate hash rate
     "updateInterval": 3, //gather stats and broadcast every this many seconds
+    "host": "127.0.0.1", //if api module is running on a different host (i.e, containerized),
     "port": 8117,
     "blocks": 30, //amount of blocks to send at a time
     "payments": 30, //amount of payments to send at a time
@@ -280,13 +334,14 @@ Explanation for each field:
 /* Coin daemon connection details. */
 "daemon": {
     "host": "127.0.0.1",
-    "port": 18081
+    "port": 29081
 },
 
 /* Wallet daemon connection details. */
 "wallet": {
     "host": "127.0.0.1",
-    "port": 8082
+    "port": 29082,
+    "password": "<replace with rpc password>"
 },
 
 /* Redis connection into. */
@@ -295,11 +350,68 @@ Explanation for each field:
     "port": 6379,
     "auth": null //If set, client will run redis auth command on connect. Use for remote db
 }
+
+/* Monitoring RPC services. Statistics will be displayed in Admin panel */
+"monitoring": {
+    "daemon": {
+        "checkInterval": 60, //interval of sending rpcMethod request
+        "rpcMethod": "getblockcount" //RPC method name
+    },
+    "wallet": {
+        "checkInterval": 60,
+        "rpcMethod": "get_address_count"
+    }
+
+/* Collect pool statistics to display in frontend charts  */
+"charts": {
+    "pool": {
+        "hashrate": {
+            "enabled": true, //enable data collection and chart displaying in frontend
+            "updateInterval": 60, //how often to get current value
+            "stepInterval": 1800, //chart step interval calculated as average of all updated values
+            "maximumPeriod": 86400 //chart maximum periods (chart points number = maximumPeriod / stepInterval = 48)
+        },
+        "workers": {
+            "enabled": true,
+            "updateInterval": 60,
+            "stepInterval": 1800, //chart step interval calculated as maximum of all updated values
+            "maximumPeriod": 86400
+        },
+        "difficulty": {
+            "enabled": true,
+            "updateInterval": 1800,
+            "stepInterval": 10800,
+            "maximumPeriod": 604800
+        },
+        "price": { //USD price of one currency coin received from cryptonator.com/api
+            "enabled": true,
+            "updateInterval": 1800,
+            "stepInterval": 10800,
+            "maximumPeriod": 604800
+        },
+        "profit": { //Reward * Rate / Difficulty
+            "enabled": true,
+            "updateInterval": 1800,
+            "stepInterval": 10800,
+            "maximumPeriod": 604800
+        }
+    },
+    "user": { //chart data displayed in user stats block
+        "hashrate": {
+            "enabled": true,
+            "updateInterval": 180,
+            "stepInterval": 1800,
+            "maximumPeriod": 86400
+        },
+        "payments": { //payment chart uses all user payments data stored in DB
+            "enabled": true
+        }
+    }
 ```
 
 #### 3) [Optional] Configure cryptonote-easy-miner for your pool
 Your miners that are Windows users can use [cryptonote-easy-miner](https://github.com/zone117x/cryptonote-easy-miner)
-which will automatically generate their wallet address and stratup multiple threads of simpleminer. You can download
+which will automatically generate their wallet address and start up multiple threads of simpleminer. You can download
 it and edit the `config.ini` file to point to your own pool.
 Inside the `easyminer` folder, edit `config.init` to point to your pool details
 ```ini
@@ -352,30 +464,29 @@ Variable explanations:
 /* Must point to the API setup in your config.json file. */
 var api = "http://poolhost:8117";
 
-/* Minimum units in a single coin, for Bytecoin its 100000000. */
-var coinUnits = 1000000000000;
-
 /* Pool server host to instruct your miners to point to.  */
-var poolHost = "cryppit.com";
+var poolHost = "poolhost.com";
 
 /* IRC Server and room used for embedded KiwiIRC chat. */
-var irc = "irc.freenode.net/#monero";
+var irc = "irc.freenode.net/#forknote";
 
 /* Contact email address. */
-var email = "support@cryppit.com";
+var email = "support@poolhost.com";
 
 /* Market stat display params from https://www.cryptonator.com/widget */
-var cryptonatorWidget = ["XMR-BTC", "XMR-USD", "XMR-EUR", "XMR-GBP"];
+var cryptonatorWidget = ["DSH-BTC", "DSH-USD", "DSH-EUR"];
 
 /* Download link to cryptonote-easy-miner for Windows users. */
 var easyminerDownload = "https://github.com/zone117x/cryptonote-easy-miner/releases/";
 
-/* Used for front-end block links. For other coins it can be changed, for example with
-   Bytecoin you can use "https://minergate.com/blockchain/bcn/block/". */
-var blockchainExplorer = "http://monerochain.info/block/";
+/* Used for front-end block links. */
+var blockchainExplorer = "http://chainradar.com/{symbol}/block/{id}";
 
-/* Used by front-end transaction links. Change for other coins. */
-var transactionExplorer = "http://monerochain.info/tx/";
+/* Used by front-end transaction links. */
+var transactionExplorer = "http://chainradar.com/{symbol}/transaction/{id}";
+
+/* Any custom CSS theme for pool frontend */
+var themeCss = "themes/default-theme.css";
 
 ```
 
@@ -405,8 +516,8 @@ No cryptonote based coins have a testnet mode (yet) but you can effectively crea
 * Open `/src/p2p/net_node.inl` and remove lines with `ADD_HARDCODED_SEED_NODE` to prevent it from connecting to mainnet (Monero example: http://git.io/0a12_Q)
 * Build the coin from source
 * You now need to run two instance of the daemon and connect them to each other (without a connection to another instance the daemon will not accept RPC requests)
-  * Run first instance with `./coind --p2p-bind-port 28080 --allow-local-ip`
-  * Run second instance with `./coind --p2p-bind-port 5011 --rpc-bind-port 5010 --add-peer 0.0.0.0:28080 --allow-local-ip`
+  * Run first instance with `./forknoted --p2p-bind-port 28080 --allow-local-ip`
+  * Run second instance with `./forknoted --p2p-bind-port 5011 --rpc-bind-port 5010 --add-peer 0.0.0.0:28080 --allow-local-ip`
 * You should now have a local testnet setup. The ports can be changes as long as the second instance is pointed to the first instance, obviously
 
 *Credit to surfer43 for these instructions*
@@ -416,7 +527,7 @@ No cryptonote based coins have a testnet mode (yet) but you can effectively crea
 
 Documentation for JSON-RPC commands can be found here:
 * Daemon https://wiki.bytecoin.org/wiki/Daemon_JSON_RPC_API
-* Wallet https://wiki.bytecoin.org/wiki/Wallet_JSON_RPC_API
+* Wallet https://wiki.bytecoin.org/wiki/Bytecoin_RPC_Wallet_API
 
 
 Curl can be used to use the JSON-RPC commands from command-line. Here is an example of calling `getblockheaderbyheight` for block 100:
@@ -433,10 +544,31 @@ curl 127.0.0.1:18081/json_rpc -d '{"method":"getblockheaderbyheight","params":{"
 * To keep your pool node script running in background, logging to file, and automatically restarting if it crashes - I suggest using [forever](https://github.com/nodejitsu/forever)
 
 
-Donations
----------
-* BTC: `1667jMt7NTZDaC8WXAxtMYBR8DPWCVoU4d`
-* MRO: `48Y4SoUJM5L3YXBEfNQ8bFNsvTNsqcH5Rgq8RF7BwpgvTBj2xr7CmWVanaw7L4U9MnZ4AG7U6Pn1pBhfQhFyFZ1rL1efL8z`
+### Configuring Blockchain Explorer
+
+You need the latest stable version of Forknote for the blockchain explorer - [forknote releases](https://github.com/forknote/forknote/releases)
+* Add the following code to the coin's config file:
+
+```
+rpc-bind-ip=0.0.0.0
+enable-blockchain-indexes=1
+enable-cors=*
+```
+
+* Launch forknoted with the corresponding config file
+* Change the following line in the pool's frontend config.js:
+
+```
+var api_blockexplorer = "http://daemonhost.com:1118";
+```
+
+* Finally, edit these variables in the pool's frontend config.js using this syntax:
+
+```
+var blockchainExplorer = 'http://poolhost/?hash={id}#blockchain_block'
+
+var transactionExplorer = 'http://poolhost/?hash={id}#blockchain_transaction'
+```
 
 Credits
 ===
@@ -446,6 +578,8 @@ Credits
 * [wallet42](http://moneropool.com) - Funded development of payment denominating and min threshold feature
 * [Wolf0](https://bitcointalk.org/index.php?action=profile;u=80740) - Helped try to deobfuscate some of the daemon code for getting a bug fixed
 * [Tacotime](https://bitcointalk.org/index.php?action=profile;u=19270) - helping with figuring out certain problems and lead the bounty for this project's creation
+* [fancoder](https://github.com/fancoder/) - See his repo for the changes
+* [TurtleCoin](https://github.com/turtlecoin/) - For making this great again
 
 License
 -------
